@@ -1,6 +1,61 @@
 import { motion } from "framer-motion";
+import { useGoogleLogin } from "@react-oauth/google";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+
 
 function Navbar() {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+
+  // Load user from localStorage
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem("user"));
+    if (stored) setUser(stored);
+  }, []);
+
+
+  const login = useGoogleLogin({
+  onSuccess: async (tokenResponse) => {
+    // 🔥 Fetch user info from Google
+    const res = await fetch(
+      "https://www.googleapis.com/oauth2/v3/userinfo",
+      {
+        headers: {
+          Authorization: `Bearer ${tokenResponse.access_token}`,
+        },
+      }
+    );
+
+    const user = await res.json();
+
+    // Save user
+    localStorage.setItem("user", JSON.stringify(user));
+
+    // redirect
+    navigate("/dashboard");
+  },
+  onError: () => console.log("Login Failed"),
+});
+// 🔥 Handle Shop click
+  const handleShop = () => {
+    if (!user) {
+      login(); // force login
+    } else {
+      navigate("/dashboard");
+    }
+  };
+
+  // 🔥 Handle History click (different page)
+  const handleHistory = () => {
+    if (!user) {
+      login();
+    } else {
+      navigate("/history"); // 👈 different page
+    }
+  };
+
+
   return (
     <motion.nav
       initial={{ opacity: 0, y: -40 }}
@@ -13,39 +68,40 @@ function Navbar() {
 
       {/* Links */}
       <div style={links}>
-        {["Home", "Menu", "Contact"].map((item, i) => (
-          <motion.a
-            key={i}
-            href="#"
-            style={link}
-            whileHover={{ scale: 1.1, color: "#ff7a18" }}
-            transition={{ type: "spring", stiffness: 300 }}
-          >
-            {item}
-          </motion.a>
-        ))}
+        <a style={link} onClick={() => navigate("/")}>Home</a>
+
+        <a style={link} onClick={handleShop}>Shop</a>
+
+        <a style={link}>Contact</a>
       </div>
 
-      {/* Buttons */}
+       {/* Actions */}
       <div style={actions}>
         <motion.button
           style={historyBtn}
+          onClick={handleHistory}
           whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
         >
           History
         </motion.button>
 
-        <motion.button
-          style={signInBtn}
-          whileHover={{ scale: 1.08 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          Sign In
-        </motion.button>
+        {!user ? (
+          <motion.button
+            style={signInBtn}
+            onClick={() => login()}
+            whileHover={{ scale: 1.08 }}
+          >
+            Sign In
+          </motion.button>
+        ) : (
+          <div style={avatar}>
+            {user.email?.charAt(0).toUpperCase()}
+          </div>
+        )}
       </div>
     </motion.nav>
   );
+
 }
 
 export default Navbar;
@@ -85,6 +141,7 @@ const links = {
 const link = {
   textDecoration: "none",
   color: "#ffffff",
+  fontfamily: "'Poppins', sans-serif",
   fontWeight: "500",
   cursor: "pointer",
 };
@@ -111,4 +168,16 @@ const signInBtn = {
   color: "#fff",
   cursor: "pointer",
   fontWeight: "600",
+};
+const avatar = {
+  width: "40px",
+  height: "40px",
+  borderRadius: "50%",
+  background: "linear-gradient(135deg, #ff5e00, #ff9a3c)",
+  color: "#fff",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  fontWeight: "700",
+  cursor: "pointer",
 };
