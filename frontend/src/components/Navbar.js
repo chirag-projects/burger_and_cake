@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { color, motion } from "framer-motion";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -152,6 +152,7 @@ const actions = {
 };
 
 const historyBtn = {
+  color: "#fff",
   padding: "8px 18px",
   borderRadius: "20px",
   border: "1px solid #ddd",
