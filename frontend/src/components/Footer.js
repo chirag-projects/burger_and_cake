@@ -20,7 +20,7 @@ function Footer() {
           <h4 style={colHeading}>Quick Links</h4>
           <ul style={linkList}>
             {["Home", "Menu", "Special Offers", "About Us", "Blog"].map((item) => (
-              <li key={item}><a href="#" style={linkItem}><span style={dot} />{item}</a></li>
+              <li key={item}><a href="/" style={linkItem}><span style={dot} />{item}</a></li>
             ))}
           </ul>
         </div>
@@ -30,7 +30,7 @@ function Footer() {
           <h4 style={colHeading}>Our Products</h4>
           <ul style={linkList}>
             {["Gourmet Burgers", "Custom Cakes", "Combo Deals", "Beverages", "Party Packs"].map((item) => (
-              <li key={item}><a href="#" style={linkItem}><span style={dot} />{item}</a></li>
+              <li key={item}><a href="/" style={linkItem}><span style={dot} />{item}</a></li>
             ))}
           </ul>
         </div>
@@ -40,7 +40,7 @@ function Footer() {
           <h4 style={colHeading}>Support</h4>
           <ul style={linkList}>
             {["Track Order", "FAQs", "Contact Us", "Refund Policy"].map((item) => (
-              <li key={item}><a href="#" style={linkItem}><span style={dot} />{item}</a></li>
+              <li key={item}><a href="/" style={linkItem}><span style={dot} />{item}</a></li>
             ))}
           </ul>
         </div>
@@ -50,12 +50,12 @@ function Footer() {
           <h4 style={colHeading}>Follow Us</h4>
           <div style={socialRow}>
             {["f", "in", "tw", "yt"].map((s) => (
-              <a key={s} href="#" style={socialBtn}>{s}</a>
+              <a key={s} href="/" style={socialBtn}>{s}</a>
             ))}
           </div>
           <ul style={{ ...linkList, marginTop: "20px" }}>
             {["+91 98765 43210", "hello@burgercake.com", "Chennai, Tamil Nadu"].map((item) => (
-              <li key={item}><a href="#" style={linkItem}><span style={dot} />{item}</a></li>
+              <li key={item}><a href="/" style={linkItem}><span style={dot} />{item}</a></li>
             ))}
           </ul>
         </div>
@@ -66,11 +66,11 @@ function Footer() {
       <div style={footerBottom}>
         <p style={copyText}>© 2026 Burger &amp; Cake. All rights reserved.</p>
         <div style={legalRow}>
-          <a href="#" style={legalLink}>Privacy Policy</a>
+          <a href="/" style={legalLink}>Privacy Policy</a>
           <span style={{ color: "rgba(255,255,255,0.3)" }}>|</span>
-          <a href="#" style={legalLink}>Terms of Use</a>
+          <a href="/" style={legalLink}>Terms of Use</a>
           <span style={{ color: "rgba(255,255,255,0.3)" }}>|</span>
-          <a href="#" style={legalLink}>Sitemap</a>
+          <a href="/" style={legalLink}>Sitemap</a>
         </div>
       </div>
 
