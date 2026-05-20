@@ -22,11 +22,11 @@ function History() {
   /* ================= FETCH DATA ================= */
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/analytics/items/")
+    fetch("https://burger-and-cake-1.onrender.com/api/analytics/items/")
       .then((res) => res.json())
       .then((data) => setPieData(data));
 
-    fetch("http://127.0.0.1:8000/api/analytics/daily/")
+    fetch("https://burger-and-cake-1.onrender.com/api/analytics/daily/")
       .then((res) => res.json())
       .then((data) => setLineData(data));
   }, []);
@@ -62,6 +62,7 @@ function History() {
           <h2>1.1M+</h2>
           <p>Customers</p>
         </div>
+        
 
         <div style={statCard}>
           <h2>98%</h2>
