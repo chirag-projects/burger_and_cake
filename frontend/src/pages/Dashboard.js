@@ -178,7 +178,7 @@ const addToCart = (item) => {
 
 const buyNow = (item) => {
   // send to backend (we'll define below)
-  fetch("http://127.0.0.1:8000/api/buy/", {
+  fetch("https://burger-and-cake-1.onrender.com/api/buy/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
