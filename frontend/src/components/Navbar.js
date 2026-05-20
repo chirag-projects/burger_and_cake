@@ -3,58 +3,65 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-
 function Navbar() {
   const navigate = useNavigate();
+
   const [user, setUser] = useState(null);
 
   // Load user from localStorage
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("user"));
-    if (stored) setUser(stored);
+
+    if (stored) {
+      setUser(stored);
+    }
   }, []);
 
-
+  // Google Login
   const login = useGoogleLogin({
-  onSuccess: async (tokenResponse) => {
-    // 🔥 Fetch user info from Google
-    const res = await fetch(
-      "https://www.googleapis.com/oauth2/v3/userinfo",
-      {
-        headers: {
-          Authorization: `Bearer ${tokenResponse.access_token}`,
-        },
-      }
-    );
+    onSuccess: async (tokenResponse) => {
 
-    const user = await res.json();
+      // Fetch Google User Info
+      const res = await fetch(
+        "https://www.googleapis.com/oauth2/v3/userinfo",
+        {
+          headers: {
+            Authorization: `Bearer ${tokenResponse.access_token}`,
+          },
+        }
+      );
 
-    // Save user
-    localStorage.setItem("user", JSON.stringify(user));
+      const user = await res.json();
 
-    // redirect
-    navigate("/dashboard");
-  },
-  onError: () => console.log("Login Failed"),
-});
-// 🔥 Handle Shop click
+      // Save User
+      localStorage.setItem("user", JSON.stringify(user));
+
+      setUser(user);
+
+      // Redirect
+      navigate("/dashboard");
+    },
+
+    onError: () => console.log("Login Failed"),
+  });
+
+  // Shop Click
   const handleShop = () => {
     if (!user) {
-      login(); // force login
+      login();
     } else {
       navigate("/dashboard");
     }
   };
 
-  // 🔥 Handle History click (different page)
+  // History Click
   const handleHistory = () => {
     if (!user) {
       login();
     } else {
-      navigate("/history"); // 👈 different page
+      navigate("/history");
     }
   };
-
 
   return (
     <motion.nav
@@ -63,52 +70,77 @@ function Navbar() {
       transition={{ duration: 0.6 }}
       style={nav}
     >
+
       {/* Logo */}
       <h2 style={logo}>🍔 Burger & Cake</h2>
 
-      {/* Links */}
+      {/* Navigation Links */}
       <div style={links}>
-        <a style={link} onClick={() => navigate("/")}>Home</a>
 
-        <a style={link} onClick={handleShop}>Shop</a>
+        <button
+          style={linkButton}
+          onClick={() => navigate("/")}
+        >
+          Home
+        </button>
 
-        <a style={link}>Contact</a>
+        <button
+          style={linkButton}
+          onClick={handleShop}
+        >
+          Shop
+        </button>
+
+        <button
+          style={linkButton}
+          onClick={() => navigate("/contact")}
+        >
+          Contact
+        </button>
+
       </div>
 
-       {/* Actions */}
+      {/* Right Buttons */}
       <div style={actions}>
+
         <motion.button
           style={historyBtn}
           onClick={handleHistory}
           whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
           History
         </motion.button>
 
         {!user ? (
+
           <motion.button
             style={signInBtn}
             onClick={() => login()}
             whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.95 }}
           >
             Sign In
           </motion.button>
+
         ) : (
-          <div style={avatar}>
+
+          <motion.div
+            style={avatar}
+            whileHover={{ scale: 1.08 }}
+          >
             {user.email?.charAt(0).toUpperCase()}
-          </div>
+          </motion.div>
+
         )}
       </div>
     </motion.nav>
   );
-
 }
 
 export default Navbar;
 
-/**
- * Styles
- */
+/* ================= STYLES ================= */
 
 const nav = {
   display: "flex",
@@ -118,11 +150,8 @@ const nav = {
   position: "sticky",
   top: 0,
   zIndex: 1000,
-
-  // glass effect
   background: "transparent",
-//   backdropFilter: "blur(10px)",
-  borderBottom: "1px solid rgba(0,0,0,0.05)",
+  borderBottom: "1px solid rgba(255,255,255,0.08)",
 };
 
 const logo = {
@@ -136,26 +165,30 @@ const logo = {
 const links = {
   display: "flex",
   gap: "30px",
+  alignItems: "center",
 };
 
-const link = {
-  textDecoration: "none",
+const linkButton = {
+  background: "transparent",
+  border: "none",
   color: "#ffffff",
-  fontfamily: "'Poppins', sans-serif",
+  fontFamily: "'Poppins', sans-serif",
   fontWeight: "500",
+  fontSize: "1rem",
   cursor: "pointer",
 };
 
 const actions = {
   display: "flex",
   gap: "15px",
+  alignItems: "center",
 };
 
 const historyBtn = {
   color: "#fff",
   padding: "8px 18px",
   borderRadius: "20px",
-  border: "1px solid #ddd",
+  border: "1px solid rgba(255,255,255,0.3)",
   background: "transparent",
   cursor: "pointer",
   fontWeight: "500",
@@ -170,6 +203,7 @@ const signInBtn = {
   cursor: "pointer",
   fontWeight: "600",
 };
+
 const avatar = {
   width: "40px",
   height: "40px",
